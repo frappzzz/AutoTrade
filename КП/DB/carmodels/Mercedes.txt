@@ -1,0 +1,53 @@
+A-class
+AMG GT
+AMG GT 4-Door
+B-class
+C-class
+C-class Sport Coupe
+Citan
+CL-class
+CLA-class
+CLC-class 
+CLK-class
+CLS-class
+E-class
+E-class Coupe
+EQA
+EQB
+EQC
+EQE
+EQE AMG
+EQS
+EQS AMG
+EQT
+EQV
+G-class
+GL-class
+GLA-class
+GLA-class AMG
+GLB-class
+GLC-class
+GLC-class AMG
+GLC-class Coupe
+GLE-class
+GLE-class AMG
+GLE-class Coupe
+GLK-class
+GLS-class
+GLS-class AMG
+M-class
+R-class
+S-class
+S-class Cabrio
+S-class Coupe
+SL-class
+SL-Class AMG
+SLC-class
+SLK-class
+SLR-class
+SLS AMG
+Sprinter
+Vaneo
+Viano
+Vito
+X-class

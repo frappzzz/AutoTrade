@@ -1,0 +1,57 @@
+A1
+A1 Allstreet
+A1 Citycarver
+A2
+A3
+A4
+A4 Allroad Quattro
+A5
+A6
+A7
+A8
+Allroad
+e-tron
+e-tron GT
+e-tron S
+e-tron S Sportback
+e-tron Sportback
+Q2
+Q2L
+Q3
+Q3 Sportback
+Q4
+Q4 Sportback
+Q5
+Q5 Sportback
+Q6
+Q7
+Q8
+Q8 e-tron
+R8
+RS e-tron GT
+RS Q3
+RS Q3 Sportback
+RS Q7
+RS Q8
+RS3
+RS4
+RS5
+RS6
+RS7
+S1
+S3
+S4
+S5
+S6
+S7
+S8
+SQ2
+SQ5
+SQ5 Sportback
+SQ7
+SQ8
+SQ8 e-tron
+SQ8 Sportback e-tron
+TT
+TT RS
+TTS
