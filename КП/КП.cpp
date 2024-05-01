@@ -3424,7 +3424,6 @@ int main() {
                 count_errors = 0;
                 break;
             }
-
             if (esc == true) {
 
                 continue;
