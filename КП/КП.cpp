@@ -1002,6 +1002,7 @@ int main() {
             int five = 5;
             bool esc = false;
             int max_page = 0;
+            bool have_ads = false;
             while (true) {
                 if (filter.brand != "none") {
                     ads = DBads.getAllAdsByBrand(filter.brand);
@@ -1032,8 +1033,12 @@ int main() {
                 start = 0;
                 cout << "     ==========================================================================================  \n";
                 if (ads.size() == 0) {
+                    have_ads = false;
                     cout << "     |                              Еще нет активных объявлений!                              |  \n";
                     cout << "     ==========================================================================================  \n";
+                }
+                else {
+                    have_ads = true;
                 }
                 if (page <= 0) {// если page 1 и мы нажали q
                     if (max_page == 1) {
@@ -1224,19 +1229,44 @@ int main() {
                     end += 5;
                     break;
                 case 'h':
-                    system("cls");
-                    states.setState("filter");  
-                    esc = true;
+                    
+                    if (have_ads == false) {
+                        cout << "\n      Еще нет объявлений для фильтрации!";
+                        Sleep(1000);
+                        system("cls");
+                    }   
+                    else {
+                        system("cls");
+                        states.setState("filter");
+                        esc = true;
+                    }
+                    
                     break;
                 case 'H':
-                    system("cls");
-                    states.setState("filter");
-                    esc = true;
+                    if (have_ads == false) {
+                        cout << "\n      Еще нет объявлений для фильтрации!";
+                        Sleep(1000);
+                        system("cls");
+                    }
+                    else {
+                        system("cls");
+                        states.setState("filter");
+                        esc = true;
+                    }
+
                     break;
                 case 'р':
-                    system("cls");
-                    states.setState("filter");
-                    esc = true;
+                    if (have_ads == false) {
+                        cout << "\n      Еще нет объявлений для фильтрации!";
+                        Sleep(1000);
+                        system("cls");
+                    }
+                    else {
+                        system("cls");
+                        states.setState("filter");
+                        esc = true;
+                    }
+
                     break;
                 default:
                     break;
@@ -1667,7 +1697,7 @@ int main() {
                 continue;
             }
             next = false;
-            cout << "\nВведите номер телефона: ";
+            cout << "\nВведите номер телефона\nМинимально 8 символов, максимально 18 символов: ";
             while (next == false) {
                 num = cinNum();
                 if (num == "`") {
@@ -1679,12 +1709,12 @@ int main() {
                     cout << "Такой номер телефона уже используется.\nВведите другой номер телефона: ";
                     count_errors += 2;
                 }
-                else if (num.size()<7) {
+                else if (num.size()<8) {
                     cout << "Неверная длина номера телефона.\nВведите другой номер телефона: ";
                     count_errors += 2;
                 }
                 else {
-                    clearCout(count_errors,73);
+                    clearCout(count_errors+1,73);
                     cout << "Номер телефона: " << num << "\n";
                     next = true;
                     count_errors = 0;
@@ -1913,7 +1943,7 @@ int main() {
                     break;
                 case '5':
                     system("cls");
-                    states.setState("main_menu");
+                    states.setState("deauthorization");
                     go_away = true;
                     break;
                 case 27:
@@ -1992,7 +2022,7 @@ int main() {
                     break;
                 case '8':
                     system("cls");
-                    states.setState("main_menu");
+                    states.setState("deauthorization");
                     go_away = true;
                     break;
                 case 27:
@@ -2204,8 +2234,8 @@ int main() {
                     num_m = "";
                     count_errors += 1;
                 }
-                else if (num_mm > car_brands.size()) {
-                    cout << "Число не должно превышать " << car_brands.size() << ". Введите новое число: ";
+                else if (num_mm > models.size()) {
+                    cout << "Число не должно превышать " << models.size() << ". Введите новое число: ";
                     num_m = "";
                     count_errors += 1;
 
@@ -2400,6 +2430,7 @@ int main() {
             int five = 4;
             bool esc = false;
             bool nextt = false;
+            bool have_ads = false;
             int max_page = 0;
             string num_ad ="";
             int num_add = 0;
@@ -2424,8 +2455,12 @@ int main() {
                 start = 0;
                 cout << "     ==========================================================================================  \n";
                 if (ads.size() == 0) {
+                    have_ads = false;
                     cout << "     |                                У Вас еще нет объявлений!                               |  \n";
                     cout << "     ==========================================================================================  \n";
+                }
+                else {
+                    have_ads = true;
                 }
 
                 if (page <= 0) {// если page 1 и мы нажали q
@@ -2639,114 +2674,138 @@ int main() {
                     end += 4;
                     break;
                 case 'd':
+                    if (have_ads == false) {
+                        cout << "\n           Еще нет объявлений, которые возможно удалить!";
+                        Sleep(1000);
+                        system("cls");
+                        
+                    }
+                    else {
+                        cout << "\n           Введите ID объявления, которое хотите удалить. \n           (Чтобы удалить объявление, после ввода нажмите Enter): ";
+                        while (nextt == false) {
+                            num_ad = cinNumb();
+                            if (num_ad == "`") {
+                                states.setState("my_ads");
+                                esc = true;
+                                break;
+                            }
+                            num_add = stoi(num_ad);
+                            bool finded = false;
+                            for (int id = 0; id < id_cu.size(); id++) {
+                                if (num_ad == id_cu[id]) {
+                                    finded = true;
+                                }
+                            }
+                            if (finded == true) {
+                                DBads.deleteAd(num_ad);
+                                clearCout(count_errors + 1, 100);
+                                cout << "           Объявление c ID:" << num_ad << " успешно удалено.";
+                                Sleep(1500);
+                                esc = true;
+                                nextt = 0;
+                                count_errors = 0;
+                                break;
+                            }
+                            else {
+                                cout << "           Неверный ID объявления. Введите новый ID объявления: ";
+                                num_ad = "";
+                                count_errors += 1;
+                            }
+                        }
+                        if (esc == true) {
+                            break;
+                        }
+                    }
+                    break;
                     
-                    cout << "\n           Введите ID объявления, которое хотите удалить. \n           (Чтобы удалить объявление, после ввода нажмите Enter): ";
-                    while (nextt == false) {
-                        num_ad = cinNumb();
-                        if (num_ad == "`") {
-                            states.setState("my_ads");
-                            esc = true;
-                            break;
-                        }
-                        num_add = stoi(num_ad);
-                        bool finded = false;
-                        for (int id = 0; id < id_cu.size(); id++) {
-                            if (num_ad == id_cu[id]) {
-                                finded = true;
-                            }
-                        }
-                        if (finded==true) {
-                            DBads.deleteAd(num_ad);
-                            clearCout(count_errors+1, 100);
-                            cout << "           Объявление c ID:"<<num_ad<<" успешно удалено.";
-                            Sleep(1500);
-                            esc = true;
-                            nextt = 0;
-                            count_errors = 0;
-                            break;
-                        }
-                        else {
-                            cout << "           Неверный ID объявления. Введите новый ID объявления: ";
-                            num_ad = "";
-                            count_errors += 1;
-                        }
-                    }
-                    if (esc == true) {
-                        break;
-                    }
                 case 'в':
+                    if (have_ads == false) {
+                        cout << "\n           Еще нет объявлений, которые возможно удалить!";
+                        Sleep(1000);
+                        system("cls");
 
-                    cout << "\n           Введите ID объявления, которое хотите удалить. \n           (Чтобы удалить объявление, после ввода нажмите Enter): ";
-                    while (nextt == false) {
-                        num_ad = cinNumb();
-                        if (num_ad == "`") {
-                            states.setState("my_ads");
-                            esc = true;
-                            break;
-                        }
-                        num_add = stoi(num_ad);
-                        bool finded = false;
-                        for (int id = 0; id < id_cu.size(); id++) {
-                            if (num_ad == id_cu[id]) {
-                                finded = true;
+                    }
+                    else {
+                        cout << "\n           Введите ID объявления, которое хотите удалить. \n           (Чтобы удалить объявление, после ввода нажмите Enter): ";
+                        while (nextt == false) {
+                            num_ad = cinNumb();
+                            if (num_ad == "`") {
+                                states.setState("my_ads");
+                                esc = true;
+                                break;
+                            }
+                            num_add = stoi(num_ad);
+                            bool finded = false;
+                            for (int id = 0; id < id_cu.size(); id++) {
+                                if (num_ad == id_cu[id]) {
+                                    finded = true;
+                                }
+                            }
+                            if (finded == true) {
+                                DBads.deleteAd(num_ad);
+                                clearCout(count_errors + 1, 100);
+                                cout << "           Объявление c ID:" << num_ad << " успешно удалено.";
+                                Sleep(1500);
+                                esc = true;
+                                nextt = 0;
+                                count_errors = 0;
+                                break;
+                            }
+                            else {
+                                cout << "           Неверный ID объявления. Введите новый ID объявления: ";
+                                num_ad = "";
+                                count_errors += 1;
                             }
                         }
-                        if (finded == true) {
-                            DBads.deleteAd(num_ad);
-                            clearCout(count_errors + 1, 100);
-                            cout << "           Объявление c ID:" << num_ad << " успешно удалено.";
-                            Sleep(1500);
-                            esc = true;
-                            nextt = 0;
-                            count_errors = 0;
+                        if (esc == true) {
                             break;
                         }
-                        else {
-                            cout << "           Неверный ID объявления. Введите новый ID объявления: ";
-                            num_ad = "";
-                            count_errors += 1;
-                        }
                     }
-                    if (esc == true) {
-                        break;
-                    }
+                    break;
                 case 'D':
+                    if (have_ads == false) {
+                        cout << "\n           Еще нет объявлений, которые возможно удалить!";
+                        Sleep(1000);
+                        system("cls");
 
-                    cout << "\n           Введите ID объявления, которое хотите удалить. \n           (Чтобы удалить объявление, после ввода нажмите Enter): ";
-                    while (nextt == false) {
-                        num_ad = cinNumb();
-                        if (num_ad == "`") {
-                            states.setState("my_ads");
-                            esc = true;
-                            break;
-                        }
-                        num_add = stoi(num_ad);
-                        bool finded = false;
-                        for (int id = 0; id < id_cu.size(); id++) {
-                            if (num_ad == id_cu[id]) {
-                                finded = true;
+                    }
+                    else {
+                        cout << "\n           Введите ID объявления, которое хотите удалить. \n           (Чтобы удалить объявление, после ввода нажмите Enter): ";
+                        while (nextt == false) {
+                            num_ad = cinNumb();
+                            if (num_ad == "`") {
+                                states.setState("my_ads");
+                                esc = true;
+                                break;
+                            }
+                            num_add = stoi(num_ad);
+                            bool finded = false;
+                            for (int id = 0; id < id_cu.size(); id++) {
+                                if (num_ad == id_cu[id]) {
+                                    finded = true;
+                                }
+                            }
+                            if (finded == true) {
+                                DBads.deleteAd(num_ad);
+                                clearCout(count_errors + 1, 100);
+                                cout << "           Объявление c ID:" << num_ad << " успешно удалено.";
+                                Sleep(1500);
+                                esc = true;
+                                nextt = 0;
+                                count_errors = 0;
+                                break;
+                            }
+                            else {
+                                cout << "           Неверный ID объявления. Введите новый ID объявления: ";
+                                num_ad = "";
+                                count_errors += 1;
                             }
                         }
-                        if (finded == true) {
-                            DBads.deleteAd(num_ad);
-                            clearCout(count_errors + 1, 100);
-                            cout << "           Объявление c ID:" << num_ad << " успешно удалено.";
-                            Sleep(1500);
-                            esc = true;
-                            nextt = 0;
-                            count_errors = 0;
+                        if (esc == true) {
                             break;
                         }
-                        else {
-                            cout << "           Неверный ID объявления. Введите новый ID объявления: ";
-                            num_ad = "";
-                            count_errors += 1;
-                        }
                     }
-                    if (esc == true) {
-                        break;
-                    }
-                    // СДЕЛАТЬ ФИЛЬТР
+                    break;
                 default:
                     break;
                 }
@@ -2781,6 +2840,7 @@ int main() {
             int five = 4;
             bool esc = false;
             bool nextt = false;
+            bool have_ads = false;
             int max_page = 0;
             string num_ad = "";
             int num_add = 0;
@@ -2805,8 +2865,12 @@ int main() {
                 start = 0;
                 cout << "     ==========================================================================================  \n";
                 if (ads.size() == 0) {
+                    have_ads = false;
                     cout << "     |                             Еще нет объявлений на модерации!                           |  \n";
                     cout << "     ==========================================================================================  \n";
+                }
+                else {
+                    have_ads = false;
                 }
 
                 if (page <= 0) {// если page 1 и мы нажали q
@@ -3007,266 +3071,317 @@ int main() {
                     end += 4;
                     break;
                 case 'a':
+                    if (have_ads == false) {
+                        cout << "\n           Еще нет объявлений, которые возможно одобрить!";
+                        Sleep(1000);
+                        system("cls");
 
-                    cout << "\n     Введите ID объявления, которое хотите одобрить. \n     (Чтобы одобрить объявление, после ввода нажмите Enter): ";
-                    while (nextt == false) {
-                        num_ad = cinNumb();
-                        if (num_ad == "`") {
-                            states.setState("ads_on_moderate");
-                            esc = true;
-                            break;
-                        }
-                        else if (num_ad=="") {
-                            cout << "     Неверный ID объявления. Введите новый ID объявления: ";
-                            num_ad = "";
-                            count_errors += 1;
-                            continue;
-                        }
-                        num_add = stoi(num_ad);
-                        bool finded = false;
-                        for (int id = 0; id < id_cu.size(); id++) {
-                            if (num_ad == id_cu[id]) {
-                                finded = true;
+                    }
+                    else {
+                        cout << "\n     Введите ID объявления, которое хотите одобрить. \n     (Чтобы одобрить объявление, после ввода нажмите Enter): ";
+                        while (nextt == false) {
+                            num_ad = cinNumb();
+                            if (num_ad == "`") {
+                                states.setState("ads_on_moderate");
+                                esc = true;
+                                break;
+                            }
+                            else if (num_ad == "") {
+                                cout << "     Неверный ID объявления. Введите новый ID объявления: ";
+                                num_ad = "";
+                                count_errors += 1;
+                                continue;
+                            }
+                            num_add = stoi(num_ad);
+                            bool finded = false;
+                            for (int id = 0; id < id_cu.size(); id++) {
+                                if (num_ad == id_cu[id]) {
+                                    finded = true;
+                                }
+                            }
+                            if (finded == true) {
+                                DBads.setStatusAd(num_add, 1);
+                                clearCout(count_errors + 1, 100);
+                                cout << "     Объявление c ID:" << num_ad << " успешно одобрено.";
+                                Sleep(1500);
+                                esc = true;
+                                nextt = 0;
+                                count_errors = 0;
+                                break;
+                            }
+                            else {
+                                cout << "     Неверный ID объявления. Введите новый ID объявления: ";
+                                num_ad = "";
+                                count_errors += 1;
                             }
                         }
-                        if (finded == true) {
-                            DBads.setStatusAd(num_add, 1);
-                            clearCout(count_errors + 1, 100);
-                            cout << "     Объявление c ID:" << num_ad << " успешно одобрено.";
-                            Sleep(1500);
-                            esc = true;
-                            nextt = 0;
-                            count_errors = 0;
+                        if (esc == true) {
                             break;
                         }
-                        else {
-                            cout << "     Неверный ID объявления. Введите новый ID объявления: ";
-                            num_ad = "";
-                            count_errors += 1;
-                        }
                     }
-                    if (esc == true) {
-                        break;
-                    }
+                    break;
+                    
                 case 'A':
+                    if (have_ads == false) {
+                        cout << "\n           Еще нет объявлений, которые возможно одобрить!";
+                        Sleep(1000);
+                        system("cls");
 
-                    cout << "\n     Введите ID объявления, которое хотите одобрить. \n     (Чтобы одобрить объявление, после ввода нажмите Enter): ";
-                    while (nextt == false) {
-                        num_ad = cinNumb();
-                        if (num_ad == "`") {
-                            states.setState("ads_on_moderate");
-                            esc = true;
-                            break;
-                        }
-                        else if (num_ad == "") {
-                            cout << "     Неверный ID объявления. Введите новый ID объявления: ";
-                            num_ad = "";
-                            count_errors += 1;
-                            continue;
-                        }
-                        num_add = stoi(num_ad);
-                        bool finded = false;
-                        for (int id = 0; id < id_cu.size(); id++) {
-                            if (num_ad == id_cu[id]) {
-                                finded = true;
+                    }
+                    else {
+                        cout << "\n     Введите ID объявления, которое хотите одобрить. \n     (Чтобы одобрить объявление, после ввода нажмите Enter): ";
+                        while (nextt == false) {
+                            num_ad = cinNumb();
+                            if (num_ad == "`") {
+                                states.setState("ads_on_moderate");
+                                esc = true;
+                                break;
+                            }
+                            else if (num_ad == "") {
+                                cout << "     Неверный ID объявления. Введите новый ID объявления: ";
+                                num_ad = "";
+                                count_errors += 1;
+                                continue;
+                            }
+                            num_add = stoi(num_ad);
+                            bool finded = false;
+                            for (int id = 0; id < id_cu.size(); id++) {
+                                if (num_ad == id_cu[id]) {
+                                    finded = true;
+                                }
+                            }
+                            if (finded == true) {
+                                DBads.setStatusAd(num_add, 1);
+                                clearCout(count_errors + 1, 100);
+                                cout << "     Объявление c ID:" << num_ad << " успешно одобрено.";
+                                Sleep(1500);
+                                esc = true;
+                                nextt = 0;
+                                count_errors = 0;
+                                break;
+                            }
+                            else {
+                                cout << "     Неверный ID объявления. Введите новый ID объявления: ";
+                                num_ad = "";
+                                count_errors += 1;
                             }
                         }
-                        if (finded == true) {
-                            DBads.setStatusAd(num_add, 1);
-                            clearCout(count_errors + 1, 100);
-                            cout << "     Объявление c ID:" << num_ad << " успешно одобрено.";
-                            Sleep(1500);
-                            esc = true;
-                            nextt = 0;
-                            count_errors = 0;
+                        if (esc == true) {
                             break;
                         }
-                        else {
-                            cout << "     Неверный ID объявления. Введите новый ID объявления: ";
-                            num_ad = "";
-                            count_errors += 1;
-                        }
                     }
-                    if (esc == true) {
-                        break;
-                    }
+                    break;
+
                 case 'ф':
+                    if (have_ads == false) {
+                        cout << "\n           Еще нет объявлений, которые возможно одобрить!";
+                        Sleep(1000);
+                        system("cls");
 
-                    cout << "\n     Введите ID объявления, которое хотите одобрить. \n     (Чтобы одобрить объявление, после ввода нажмите Enter): ";
-                    while (nextt == false) {
-                        num_ad = cinNumb();
-                        if (num_ad == "`") {
-                            states.setState("ads_on_moderate");
-                            esc = true;
-                            break;
-                        }
-                        else if (num_ad == "") {
-                            cout << "     Неверный ID объявления. Введите новый ID объявления: ";
-                            num_ad = "";
-                            count_errors += 1;
-                            continue;
-                        }
-                        num_add = stoi(num_ad);
-                        bool finded = false;
-                        for (int id = 0; id < id_cu.size(); id++) {
-                            if (num_ad == id_cu[id]) {
-                                finded = true;
+                    }
+                    else {
+                        cout << "\n     Введите ID объявления, которое хотите одобрить. \n     (Чтобы одобрить объявление, после ввода нажмите Enter): ";
+                        while (nextt == false) {
+                            num_ad = cinNumb();
+                            if (num_ad == "`") {
+                                states.setState("ads_on_moderate");
+                                esc = true;
+                                break;
+                            }
+                            else if (num_ad == "") {
+                                cout << "     Неверный ID объявления. Введите новый ID объявления: ";
+                                num_ad = "";
+                                count_errors += 1;
+                                continue;
+                            }
+                            num_add = stoi(num_ad);
+                            bool finded = false;
+                            for (int id = 0; id < id_cu.size(); id++) {
+                                if (num_ad == id_cu[id]) {
+                                    finded = true;
+                                }
+                            }
+                            if (finded == true) {
+                                DBads.setStatusAd(num_add, 1);
+                                clearCout(count_errors + 1, 100);
+                                cout << "     Объявление c ID:" << num_ad << " успешно одобрено.";
+                                Sleep(1500);
+                                esc = true;
+                                nextt = 0;
+                                count_errors = 0;
+                                break;
+                            }
+                            else {
+                                cout << "     Неверный ID объявления. Введите новый ID объявления: ";
+                                num_ad = "";
+                                count_errors += 1;
                             }
                         }
-                        if (finded == true) {
-                            DBads.setStatusAd(num_add, 1);
-                            clearCout(count_errors + 1, 100);
-                            cout << "     Объявление c ID:" << num_ad << " успешно одобрено.";
-                            Sleep(1500);
-                            esc = true;
-                            nextt = 0;
-                            count_errors = 0;
+                        if (esc == true) {
                             break;
                         }
-                        else {
-                            cout << "     Неверный ID объявления. Введите новый ID объявления: ";
-                            num_ad = "";
-                            count_errors += 1;
-                        }
                     }
-                    if (esc == true) {
-                        break;
-                    }
-                    // СДЕЛАТЬ ФИЛЬТР
+                    break;
+
                 case 'd':
+                    if (have_ads == false) {
+                        cout << "\n           Еще нет объявлений, которые возможно отклонить!";
+                        Sleep(1000);
+                        system("cls");
 
-                    cout << "\n     Введите ID объявления, которое хотите отклонить. \n     (Чтобы отклонить объявление, после ввода нажмите Enter): ";
-                    while (nextt == false) {
-                        num_ad = cinNumb();
-                        if (num_ad == "`") {
-                            states.setState("ads_on_moderate");
-                            esc = true;
-                            break;
-                        }
-                        else if (num_ad=="") {
-                            cout << "     Неверный ID объявления. Введите новый ID объявления: ";
-                            num_ad = "";
-                            count_errors += 1;
-                            continue;
-                        }
-                        num_add = stoi(num_ad);
-                        bool finded = false;
-                        for (int id = 0; id < id_cu.size(); id++) {
-                            if (num_ad == id_cu[id]) {
-                                finded = true;
+                    }
+                    else {
+                        cout << "\n     Введите ID объявления, которое хотите отклонить. \n     (Чтобы отклонить объявление, после ввода нажмите Enter): ";
+                        while (nextt == false) {
+                            num_ad = cinNumb();
+                            if (num_ad == "`") {
+                                states.setState("ads_on_moderate");
+                                esc = true;
+                                break;
+                            }
+                            else if (num_ad == "") {
+                                cout << "     Неверный ID объявления. Введите новый ID объявления: ";
+                                num_ad = "";
+                                count_errors += 1;
+                                continue;
+                            }
+                            num_add = stoi(num_ad);
+                            bool finded = false;
+                            for (int id = 0; id < id_cu.size(); id++) {
+                                if (num_ad == id_cu[id]) {
+                                    finded = true;
+                                }
+                            }
+                            if (finded == true) {
+                                string cause = "";
+                                cout << "     Введите причину отклонения объявления: ";
+                                cause = cinCause();
+                                DBads.setStatusAd(num_add, 0, cause);
+                                clearCout(count_errors + 2, 100);
+                                cout << "     Объявление c ID:" << num_ad << " успешно отклонено.";
+                                Sleep(1500);
+                                esc = true;
+                                nextt = 0;
+                                count_errors = 0;
+                                break;
+                            }
+                            else {
+                                cout << "     Неверный ID объявления. Введите новый ID объявления:";
+                                num_ad = "";
+                                count_errors += 1;
                             }
                         }
-                        if (finded == true) {
-                            string cause = "";
-                            cout << "     Введите причину отклонения объявления: ";
-                            cause = cinCause();
-                            DBads.setStatusAd(num_add, 0, cause);
-                            clearCout(count_errors + 2, 100);
-                            cout << "     Объявление c ID:" << num_ad << " успешно отклонено.";
-                            Sleep(1500);
-                            esc = true;
-                            nextt = 0;
-                            count_errors = 0;
+                        if (esc == true) {
                             break;
                         }
-                        else {
-                            cout << "     Неверный ID объявления. Введите новый ID объявления:";
-                            num_ad = "";
-                            count_errors += 1;
-                        }
                     }
-                    if (esc == true) {
-                        break;
-                    }
-                    // СДЕЛАТЬ ФИЛЬТР
+                    break;
                 case 'D':
-                    cout << "\n     Введите ID объявления, которое хотите отклонить. \n     (Чтобы отклонить объявление, после ввода нажмите Enter): ";
-                    while (nextt == false) {
-                        num_ad = cinNumb();
-                        if (num_ad == "`") {
-                            states.setState("ads_on_moderate");
-                            esc = true;
-                            break;
-                        }
-                        else if (num_ad == "") {
-                            cout << "     Неверный ID объявления. Введите новый ID объявления: ";
-                            num_ad = "";
-                            count_errors += 1;
-                            continue;
-                        }
-                        num_add = stoi(num_ad);
-                        bool finded = false;
-                        for (int id = 0; id < id_cu.size(); id++) {
-                            if (num_ad == id_cu[id]) {
-                                finded = true;
+                    if (have_ads == false) {
+                        cout << "\n           Еще нет объявлений, которые возможно отклонить!";
+                        Sleep(1000);
+                        system("cls");
+
+                    }
+                    else {
+                        cout << "\n     Введите ID объявления, которое хотите отклонить. \n     (Чтобы отклонить объявление, после ввода нажмите Enter): ";
+                        while (nextt == false) {
+                            num_ad = cinNumb();
+                            if (num_ad == "`") {
+                                states.setState("ads_on_moderate");
+                                esc = true;
+                                break;
+                            }
+                            else if (num_ad == "") {
+                                cout << "     Неверный ID объявления. Введите новый ID объявления: ";
+                                num_ad = "";
+                                count_errors += 1;
+                                continue;
+                            }
+                            num_add = stoi(num_ad);
+                            bool finded = false;
+                            for (int id = 0; id < id_cu.size(); id++) {
+                                if (num_ad == id_cu[id]) {
+                                    finded = true;
+                                }
+                            }
+                            if (finded == true) {
+                                string cause = "";
+                                cout << "     Введите причину отклонения объявления: ";
+                                cause = cinCause();
+                                DBads.setStatusAd(num_add, 0, cause);
+                                clearCout(count_errors + 2, 100);
+                                cout << "     Объявление c ID:" << num_ad << " успешно отклонено.";
+                                Sleep(1500);
+                                esc = true;
+                                nextt = 0;
+                                count_errors = 0;
+                                break;
+                            }
+                            else {
+                                cout << "     Неверный ID объявления. Введите новый ID объявления:";
+                                num_ad = "";
+                                count_errors += 1;
                             }
                         }
-                        if (finded == true) {
-                            string cause = "";
-                            cout << "     Введите причину отклонения объявления: ";
-                            cause = cinCause();
-                            DBads.setStatusAd(num_add, 0, cause);
-                            clearCout(count_errors + 2, 100);
-                            cout << "     Объявление c ID:" << num_ad << " успешно отклонено.";
-                            Sleep(1500);
-                            esc = true;
-                            nextt = 0;
-                            count_errors = 0;
+                        if (esc == true) {
                             break;
                         }
-                        else {
-                            cout << "     Неверный ID объявления. Введите новый ID объявления:";
-                            num_ad = "";
-                            count_errors += 1;
-                        }
                     }
-                    if (esc == true) {
-                        break;
-                    }
+                    break;
                 case 'в':
-                    cout << "\n     Введите ID объявления, которое хотите отклонить. \n     (Чтобы отклонить объявление, после ввода нажмите Enter): ";
-                    while (nextt == false) {
-                        num_ad = cinNumb();
-                        if (num_ad == "`") {
-                            states.setState("ads_on_moderate");
-                            esc = true;
-                            break;
-                        }
-                        else if (num_ad == "") {
-                            cout << "     Неверный ID объявления. Введите новый ID объявления: ";
-                            num_ad = "";
-                            count_errors += 1;
-                            continue;
-                        }
-                        num_add = stoi(num_ad);
-                        bool finded = false;
-                        for (int id = 0; id < id_cu.size(); id++) {
-                            if (num_ad == id_cu[id]) {
-                                finded = true;
+                    if (have_ads == false) {
+                        cout << "\n           Еще нет объявлений, которые возможно отклонить!";
+                        Sleep(1000);
+                        system("cls");
+
+                    }
+                    else {
+                        cout << "\n     Введите ID объявления, которое хотите отклонить. \n     (Чтобы отклонить объявление, после ввода нажмите Enter): ";
+                        while (nextt == false) {
+                            num_ad = cinNumb();
+                            if (num_ad == "`") {
+                                states.setState("ads_on_moderate");
+                                esc = true;
+                                break;
+                            }
+                            else if (num_ad == "") {
+                                cout << "     Неверный ID объявления. Введите новый ID объявления: ";
+                                num_ad = "";
+                                count_errors += 1;
+                                continue;
+                            }
+                            num_add = stoi(num_ad);
+                            bool finded = false;
+                            for (int id = 0; id < id_cu.size(); id++) {
+                                if (num_ad == id_cu[id]) {
+                                    finded = true;
+                                }
+                            }
+                            if (finded == true) {
+                                string cause = "";
+                                cout << "     Введите причину отклонения объявления: ";
+                                cause = cinCause();
+                                DBads.setStatusAd(num_add, 0, cause);
+                                clearCout(count_errors + 2, 100);
+                                cout << "     Объявление c ID:" << num_ad << " успешно отклонено.";
+                                Sleep(1500);
+                                esc = true;
+                                nextt = 0;
+                                count_errors = 0;
+                                break;
+                            }
+                            else {
+                                cout << "     Неверный ID объявления. Введите новый ID объявления:";
+                                num_ad = "";
+                                count_errors += 1;
                             }
                         }
-                        if (finded == true) {
-                            string cause = "";
-                            cout << "     Введите причину отклонения объявления: ";
-                            cause = cinCause();
-                            DBads.setStatusAd(num_add, 0, cause);
-                            clearCout(count_errors + 2, 100);
-                            cout << "     Объявление c ID:" << num_ad << " успешно отклонено.";
-                            Sleep(1500);
-                            esc = true;
-                            nextt = 0;
-                            count_errors = 0;
+                        if (esc == true) {
                             break;
                         }
-                        else {
-                            cout << "     Неверный ID объявления. Введите новый ID объявления:";
-                            num_ad = "";
-                            count_errors += 1;
-                        }
                     }
-                    if (esc == true) {
-                        break;
-                    }
+                    break;
                 
                 }
 
@@ -3442,6 +3557,31 @@ int main() {
             if (esc == true) {
 
                 continue;
+            }
+        }
+        else if (states.current_state == "deauthorization") {
+            system("cls");
+            system("mode con cols=87 lines=12");
+            coutFromFile("./ASCII/deauthorization.txt");
+            char key = _getch();
+            switch (key) {
+            case '1':
+                system("cls");
+                states.setState("main_menu");
+                break;
+            case '2':
+                system("cls");
+                if (user.status_user == "0") {
+                    states.setState("lk");
+                }
+                else {
+                    states.setState("lk_a");
+                }
+                break;
+            case 27:
+                exit(0);
+            default:
+                break;
             }
         }
     }
