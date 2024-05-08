@@ -2162,7 +2162,12 @@ int main() {
             while (next == false) {
                 num_b = cinNumb();
                 if (num_b == "`") {
-                    states.setState("lk_a");
+                    if (user.status_user == "0") {
+                        states.setState("lk");
+                    }
+                    else {
+                        states.setState("lk_a");
+                    }
                     esc = true;
                     break;
                 }
@@ -2689,6 +2694,12 @@ int main() {
                                 esc = true;
                                 break;
                             }
+                            if (num_ad == "") {
+                                cout << "           Неверный ID объявления. Введите новый ID объявления: ";
+                                num_ad = "";
+                                count_errors += 1;
+                                continue;
+                            }
                             num_add = stoi(num_ad);
                             bool finded = false;
                             for (int id = 0; id < id_cu.size(); id++) {
@@ -2734,6 +2745,12 @@ int main() {
                                 esc = true;
                                 break;
                             }
+                            if (num_ad == "") {
+                                cout << "           Неверный ID объявления. Введите новый ID объявления: ";
+                                num_ad = "";
+                                count_errors += 1;
+                                continue;
+                            }
                             num_add = stoi(num_ad);
                             bool finded = false;
                             for (int id = 0; id < id_cu.size(); id++) {
@@ -2777,6 +2794,12 @@ int main() {
                                 states.setState("my_ads");
                                 esc = true;
                                 break;
+                            }
+                            if (num_ad == "") {
+                                cout << "           Неверный ID объявления. Введите новый ID объявления: ";
+                                num_ad = "";
+                                count_errors += 1;
+                                continue;
                             }
                             num_add = stoi(num_ad);
                             bool finded = false;
@@ -2870,7 +2893,7 @@ int main() {
                     cout << "     ==========================================================================================  \n";
                 }
                 else {
-                    have_ads = false;
+                    have_ads = true;
                 }
 
                 if (page <= 0) {// если page 1 и мы нажали q
@@ -3266,7 +3289,7 @@ int main() {
                                 break;
                             }
                             else {
-                                cout << "     Неверный ID объявления. Введите новый ID объявления:";
+                                cout << "     Неверный ID объявления. Введите новый ID объявления: ";
                                 num_ad = "";
                                 count_errors += 1;
                             }
@@ -3319,7 +3342,7 @@ int main() {
                                 break;
                             }
                             else {
-                                cout << "     Неверный ID объявления. Введите новый ID объявления:";
+                                cout << "     Неверный ID объявления. Введите новый ID объявления: ";
                                 num_ad = "";
                                 count_errors += 1;
                             }
@@ -3372,7 +3395,7 @@ int main() {
                                 break;
                             }
                             else {
-                                cout << "     Неверный ID объявления. Введите новый ID объявления:";
+                                cout << "     Неверный ID объявления. Введите новый ID объявления: ";
                                 num_ad = "";
                                 count_errors += 1;
                             }
